@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <link rel="icon" href="images/avatar0.jpg" type="image/jpeg">
+    <title>个人信息展示页面</title>
+
+    <!-- 内部样式表区域 -->
+    <style>
+        /* ==================== 全局样式 ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 全局平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #f3e5f5 100%);
+            background-size: 200% 200%;
+            animation: bgFlow 12s ease infinite;
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        @keyframes bgFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* ==================== 头部样式 ==================== */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s 0.1s forwards ease-out;
+        }
+
+        header img {
+            width: 251px;
+            height: 251px;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            margin-bottom: 20px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 30px rgba(74, 144, 226, 0.4);
+            animation: avatarBreath 3s infinite alternate ease-in-out;
+        }
+
+        @keyframes avatarBreath {
+            from {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 25px rgba(74, 144, 226, 0.35);
+            }
+
+            to {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 40px rgba(74, 144, 226, 0.6);
+            }
+        }
+
+        header img:hover {
+            transform: scale(1.06);
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            font-family: "华文新魏";
+            text-decoration: underline;
+        }
+
+        header p {
+            font-size: 16px;
+            color: #7f8c8d;
+            font-style: italic;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ==================== 模块通用样式 ==================== */
+        section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards ease-out;
+            position: relative;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 12px;
+            box-shadow: 0 0 0 1px rgba(74, 144, 226, 0.1);
+            pointer-events: none;
+        }
+
+        section.base-info {
+            animation-delay: 0.3s;
+        }
+
+        section.skills {
+            animation-delay: 0.5s;
+        }
+
+        section.hobbies {
+            animation-delay: 0.7s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section:hover {
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            font-size: 25px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            padding-left: 12px;
+            border-left: 4px solid #ced194;
+            border-bottom: 2px solid #d194bb;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        /* 基本信息区 */
+        .base-info ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .base-info li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #ecf0f1;
+            font-size: 14px;
+        }
+
+        .base-info li strong {
+            color: #34495e;
+            display: inline-block;
+            width: 50px;
+        }
+
+        .base-info a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        /* 技能特长区 */
+        .skills-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .skill-item {
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            color: #e74c3c;
+            background: #fff;
+            border-left-color: #e74c3c;
+            transform: translateX(5px);
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+
+        .skill-level {
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+
+        /* 进度条 + 流光 + 呼吸辉光 */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 4px;
+            animation: progressAnimate 1.4s 0.3s forwards ease-out;
+            position: relative;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+
+        @keyframes progressAnimate {
+            0% {
+                width: 0%;
+            }
+        }
+
+        /* 流光 */
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -20px;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8), transparent);
+            animation: lightLoop 1.4s infinite linear;
+        }
+
+        @keyframes lightLoop {
+            0% {
+                left: -20px;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* 技能条完成后呼吸辉光 */
+        .progress-fill {
+            animation: progressAnimate 1.4s 0.3s forwards ease-out,
+                glowSoft 3s infinite alternate 1.7s;
+        }
+
+        @keyframes glowSoft {
+            from {
+                box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+            }
+
+            to {
+                box-shadow: 0 0 16px rgba(52, 152, 219, 0.5);
+            }
+        }
+
+        /* 兴趣爱好区 */
+        .hobbies-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .hobby-tag {
+            position: relative;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .hobby-tag::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0%;
+            height: 0%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
+        }
+
+        .hobby-tag:hover::before {
+            width: 150%;
+            height: 150%;
+        }
+
+        .hobby-tag:hover {
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .hobby-tag:nth-child(2) {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .hobby-tag:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .hobby-tag:nth-child(4) {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        .hobby-tag:nth-child(5) {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+        }
+
+        .hobby-tag.selected {
+            background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+            font-weight: bold;
+        }
+
+        .hobby-tag.selected::before {
+            content: "✅ ";
+        }
+
+        /* ========= 计数器卡片样式 ========= */
+        .count-box {
+            background: linear-gradient(135deg, #f7fcff, #e0f7fa);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            margin: 30px 0 20px 0;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            transition: transform 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s 0.9s forwards ease-out;
+        }
+
+        .count-box:hover {
+            transform: translateY(-4px);
+        }
+
+        #countShow {
+            font-size: 50px;
+            font-weight: bold;
+            color: #2b6cb0;
+            margin: 10px 0;
+        }
+
+        /* ========= 缓存闭包计算器样式  ========= */
+        .cache-box {
+            background: linear-gradient(135deg, #fff5eb, #ffe6f0);
+            border-radius: 12px;
+            padding: 28px 22px;
+            margin: 0 0 30px 0;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s 0.95s forwards ease-out;
+            text-align: center;
+        }
+
+        .cache-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+        }
+
+        .cache-box h3 {
+            font-size: 24px;
+            color: #c44536;
+            margin-bottom: 18px;
+            border-left: 4px solid #e67e22;
+            padding-left: 14px;
+            display: inline-block;
+        }
+
+        .cache-input-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0 15px;
+        }
+
+        .cache-input-group input {
+            width: 130px;
+            padding: 10px 12px;
+            font-size: 18px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            text-align: center;
+            background: #fff;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: 0.2s;
+        }
+
+        .cache-input-group input:focus {
+            border-color: #e67e22;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.2);
+        }
+
+        .cache-result-area {
+            background: rgba(255, 255, 240, 0.7);
+            border-radius: 40px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .cache-sum {
+            font-size: 36px;
+            font-weight: bold;
+            color: #d35400;
+            margin: 8px 0;
+        }
+
+        .cache-status {
+            font-size: 15px;
+            padding: 6px 12px;
+            background: #2c3e50;
+            color: #f1c40f;
+            display: inline-block;
+            border-radius: 50px;
+            font-family: monospace;
+        }
+
+        .cache-btn {
+            background: #e67e22;
+            border: none;
+            padding: 10px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .cache-btn:hover {
+            background: #d35400;
+            transform: scale(1.02);
+        }
+
+        .cache-clear-btn {
+            background: #7f8c8d;
+            margin-left: 12px;
+        }
+
+        .cache-clear-btn:hover {
+            background: #5d6d6e;
+        }
+
+        /* 响应式小屏 */
+        @media (max-width: 680px) {
+            .base-info ul {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cache-input-group input {
+                width: 100px;
+            }
+
+            .count-box,
+            .cache-box {
+                padding: 20px 15px;
+            }
+        }
+
+        footer {
+            text-align: center;
+            color: #95a5a6;
+            font-size: 14px;
+            opacity: 0;
+            animation: fadeInUp 0.8s 1.1s forwards ease-out;
+            margin-top: 10px;
+        }
+
+        .experiment-btn {
+            padding: 8px 16px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .experiment-btn:hover {
+            background: #2980b9;
+        }
+
+        .module-content {
+            transition: 0.2s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 页面头部 -->
+        <header>
+            <img src="images/avatar0.jpg" alt="个人头像" style="filter: brightness(1.05) contrast(1.1);" id="avatarImg">
+            <h1 id="userName">冰封暗影</h1>
+            <button class="experiment-btn" id="editNameBtn">编辑姓名</button>
+            <button class="experiment-btn" id="confirmNameBtn" style="display:none;">确认修改</button>
+            <p>代码如诗，逻辑似画 | 在bug与feature之间寻找平衡</p>
+        </header>
+
+        <!-- 基本信息区 -->
+        <section class="base-info">
+            <h2>基本信息</h2>
+            <div class="module-content">
+                <ul>
+                    <li><strong>性别：</strong>男</li>
+                    <li><strong>年龄：</strong>22岁</li>
+                    <li><strong>专业：</strong>网络工程(网络信息防御)</li>
+                    <li><strong>学历：</strong>本科在读</li>
+                    <li><strong>院校：</strong><a href="http://www.nudt.edu.cn" target="_blank">四方坪职业技术学院</a></li>
+                    <li><strong>电话：</strong>188-7415-8317</li>
+                    <li><strong>邮箱：</strong>1830806188@qq.com</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 技能特长区 -->
+        <section class="skills">
+            <h2>技能特长</h2>
+            <div class="module-content">
+                <div class="skills-container">
+                    <div class="skill-item"
+                        data-desc="熟练使用Python进行网络爬虫开发，掌握Requests、BeautifulSoup、Xpath、Scrapy框架，能完成数据爬取、清洗、存储、自动化采集与反爬处理。">
+                        <div class="skill-header"><span class="skill-name">Python 爬虫开发</span><span
+                                class="skill-level">熟练度 85%</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item"
+                        data-desc="掌握HTML5与CSS3核心语法，能实现响应式布局、弹性布局、网格布局，熟悉常见网页样式设计与动画效果，可独立完成美观的静态页面开发。">
+                        <div class="skill-header"><span class="skill-name">HTML/CSS 前端基础</span><span
+                                class="skill-level">熟练度 60%</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item" data-desc="熟悉Linux操作系统基础命令，掌握文件管理、权限配置、进程管理、服务部署、日志分析，能够完成基础的服务器环境搭建与运维操作。">
+                        <div class="skill-header"><span class="skill-name">Linux 系统运维</span><span
+                                class="skill-level">熟练度 70%</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item" data-desc="了解网络安全基础理论，掌握常见端口扫描、漏洞检测、流量分析、防火墙基础配置，具备初步的网络攻防与安全防御意识。">
+                        <div class="skill-header"><span class="skill-name">网络安全基础</span><span class="skill-level">熟练度
+                                55%</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 55%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 兴趣爱好区 -->
+        <section class="hobbies">
+            <h2>兴趣爱好</h2>
+            <div class="module-content">
+                <div class="hobbies-container">
+                    <span class="hobby-tag">机车骑行</span>
+                    <span class="hobby-tag">街头摄影</span>
+                    <span class="hobby-tag">夜跑健身</span>
+                    <span class="hobby-tag">独立游戏</span>
+                    <span class="hobby-tag">硬件折腾</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 闭包计数器模块  -->
+        <div class="count-box">
+            <h3>✨ 闭包计数器 ✨</h3>
+            <button class="experiment-btn" id="countBtn">🔘 点击计数</button>
+            <h2 id="countShow">0</h2>
+            <p style="font-size: 13px; color:#2c3e50;">count 变量被闭包保护，外部无法篡改</p>
+        </div>
+
+        <!-- ========= 缓存闭包计算器 (两数求和 + 缓存演示) ========= -->
+        <div class="cache-box">
+            <h3>📦 缓存闭包计算器 (Sum Cache)</h3>
+            <p style="color:#555; margin-bottom: 5px;">基于闭包的私有Cache对象 | 相同参数命中缓存，提升性能</p>
+            <div class="cache-input-group">
+                <input type="number" id="numA" placeholder="数字 A" value="12">
+                <input type="number" id="numB" placeholder="数字 B" value="28">
+                <button class="cache-btn" id="calcSumBtn">✨ 求和计算</button>
+                <button class="cache-btn cache-clear-btn" id="clearCacheBtn">🗑️ 清空缓存</button>
+            </div>
+            <div class="cache-result-area">
+                <div style="font-size: 16px; opacity:0.8;">计算结果</div>
+                <div class="cache-sum" id="cacheSumResult">40</div>
+                <div class="cache-status" id="cacheHitInfo">⚡ 等待计算</div>
+                <div style="font-size: 12px; margin-top: 12px; color:#b94e2e;">🔒 cache对象被闭包封装，外部无法直接访问</div>
+            </div>
+            <div style="font-size: 13px; margin-top: 12px; background:#fff3e0; border-radius: 30px; padding: 6px;">
+                💡 尝试重复输入相同数字 → 命中缓存 → 快速返回结果并显示缓存命中
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 个人信息展示页面 | 缓存求和 | 计数器</p>
+            <p style="font-size: 12px; color: #bdc3c7;">最后更新：2026年3月</p>
+        </footer>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
